@@ -1,0 +1,24 @@
+# Python virtual environment
+venv/
+**/venv/
+
+# Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# Dataset
+*.csv
+
+# Trained model artifacts
+*.joblib
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
