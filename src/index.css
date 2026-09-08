@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --ink: #211318;
+  --maroon: #711726;
+  --maroon-deep: #4a0e1a;
+  --maroon-bright: #8f1f31;
+  --gold: #c99a3d;
+  --gold-soft: #e0be7c;
+  --ivory: #f4ead9;
+  --sand: #e8d8bd;
+  --sand-line: #d2bd97;
+  --teal: #1f5c56;
+  --teal-soft: #2f7a72;
+  --stone: #8c7a68;
+  --stone-dark: #5c4f43;
+  --danger: #a63b2c;
+
+  --font-display: "Marcellus", "Iowan Old Style", serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-arch: 120px 120px 8px 8px;
+  --radius-arch-sm: 64px 64px 6px 6px;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--ivory);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+  color: var(--maroon-deep);
+}
+
+p { margin: 0; }
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+a { color: inherit; }
+
+::selection {
+  background: var(--gold-soft);
+  color: var(--maroon-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+/* Kolam dot-grid texture, used sparingly as a background wash */
+.kolam-field {
+  background-image: radial-gradient(var(--sand-line) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
