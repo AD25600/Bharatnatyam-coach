@@ -13,7 +13,7 @@ __pycache__/
 # Trained model artifacts
 *.joblib
 
-# Environment variables
+# Environment files
 .env
 
 # VS Code
@@ -22,3 +22,7 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Frontend dependencies
+node_modules/
+dist/
