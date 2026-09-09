@@ -26,12 +26,12 @@ export default function App() {
     setError(null);
   }
 
-  async function handleAnalyze() {
-    if (!imageBlob) return;
+  async function handleAnalyze(blob = imageBlob) {
+    if (!blob) return;
     setLoading(true);
     setError(null);
     try {
-      const data = await analyzePose(imageBlob);
+      const data = await analyzePose(blob);
       setResult(data);
     } catch (err) {
       setError(err.message || "Something went wrong reaching the pose server.");

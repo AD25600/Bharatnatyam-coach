@@ -64,7 +64,12 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
       )}
 
       {mode === "webcam" && !previewUrl && (
-        <WebcamCapture onCapture={(blob, dataUrl) => onImageReady(blob, dataUrl)} />
+        <WebcamCapture
+          onCapture={(blob, dataUrl) => {
+            onImageReady(blob, dataUrl);
+            onAnalyze(blob);
+          }}
+        />
       )}
 
       {previewUrl && (
@@ -77,7 +82,7 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
             <button
               type="button"
               className="btn btn--primary"
-              onClick={onAnalyze}
+              onClick={() => onAnalyze()}
               disabled={disabled || loading}
             >
               {loading ? "Reading the pose\u2026" : "Analyze pose"}

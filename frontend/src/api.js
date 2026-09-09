@@ -10,9 +10,14 @@ const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
  *     worst_body_parts, feedback, deviations, image (base64 jpg) }
  * or, on a rejected frame: { success: false, message }.
  */
-export async function analyzePose(imageBlob) {
+export async function analyzePose(fileOrBlob) {
+  if (!(fileOrBlob instanceof Blob)) {
+    throw new Error("The selected image is not a file. Please choose or capture another image.");
+  }
+
   const formData = new FormData();
-  formData.append("file", imageBlob, "frame.jpg");
+  const filename = fileOrBlob.name || "frame.jpg";
+  formData.append("file", fileOrBlob, filename);
 
   let response;
   try {
