@@ -290,7 +290,7 @@
 }
 
 .result-top__joints {
-  font-size: 13px;
+  font-size: clamp(13px, 1.3vw, 15px);
   color: var(--stone-dark);
   margin-top: 4px;
 }
@@ -325,11 +325,12 @@
 
 /* ---------- Feedback ---------- */
 .result-feedback {
-  font-size: 15px;
+  font-size: clamp(16px, 1.7vw, 19px);
+  line-height: 1.55;
   color: var(--stone-dark);
   background: var(--sand);
   border-radius: 14px;
-  padding: 14px 18px;
+  padding: 16px 20px;
   margin-bottom: 22px;
 }
 
