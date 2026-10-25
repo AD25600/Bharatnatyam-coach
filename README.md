@@ -20,24 +20,40 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-## One backend change you need: CORS
+## CORS
 
-The backend as cloned has no CORS policy, so the browser will block requests
-from the Vite dev server. Add this to `bharatnatyam_backend/main.py` (this is
-transport config, not ML logic):
+Allowed origins come from the `ALLOWED_ORIGINS` env var on the backend
+(comma-separated). It defaults to `http://localhost:5173,http://127.0.0.1:5173`
+for local dev, so nothing needs setting locally.
 
-```python
-from fastapi.middleware.cors import CORSMiddleware
+## Deploying (Vercel/Netlify + Render)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-```
+**1. Backend → Render**
 
-Add it right after `app = FastAPI(...)` in `main.py`.
+- New → Blueprint → pick this repo (uses `render.yaml`), or create a Python
+  web service with root `bharatnatyam_backend`, build
+  `pip install -r requirements.txt`, start
+  `uvicorn main:app --host 0.0.0.0 --port $PORT`. Python 3.11 is pinned
+  (mediapipe doesn't support the newest Python versions).
+- Set `ALLOWED_ORIGINS` to your frontend URL, e.g. `https://your-app.vercel.app`.
+- **Model files:** `random_forest_model.joblib` and `pose_stats.joblib` are
+  git-ignored, but the server needs them in `bharatnatyam_backend/models/`.
+  Either force-add them on the branch you deploy
+  (`git add -f bharatnatyam_backend/models/*.joblib`), or host them somewhere
+  (e.g. a GitHub release) and download them in the build command:
+  `pip install -r requirements.txt && curl -L -o models/random_forest_model.joblib <url> && curl -L -o models/pose_stats.joblib <url>`.
+- Free Render instances sleep when idle; the first request can take ~1 min.
+  The UI shows a "server may be waking up" note and times out after 90s.
+
+**2. Frontend → Vercel or Netlify**
+
+- Vercel: import the repo, set Root Directory to `frontend` (framework: Vite).
+  `frontend/vercel.json` handles SPA routing so `/demo` works on refresh.
+- Netlify: import the repo; `netlify.toml` at the root already sets the base
+  directory, build command, and SPA redirect.
+- Set `VITE_API_URL` to your Render URL (e.g. `https://natya-drishti-api.onrender.com`)
+  in the host's environment variables. It's baked in at build time, so
+  redeploy after changing it.
 
 ## What the UI does
 
@@ -56,6 +72,11 @@ Add it right after `app = FastAPI(...)` in `main.py`.
 
 ```
 src/
+  config.js                 env-driven settings (API URL, timeout, upload limit)
+  content/site.js           all landing-page copy — edit text here
+  pages/                    LandingPage, DemoPage, NotFoundPage
+  layout/SiteLayout.jsx     shared header/footer shell
+
   api.js                    fetch wrapper for POST /predict
   App.jsx / App.css         page layout + design system
   index.css                 color/type tokens

@@ -6,6 +6,7 @@ Run with:
 """
 
 import base64
+import os
 
 import cv2
 import numpy as np
@@ -19,13 +20,20 @@ from app.predictor import predict_image
 app = FastAPI(title="Bharatnatyam Pose Classifier")
 
 
-# Allow the React/Vite frontend to communicate with FastAPI
+# Allow the React/Vite frontend to communicate with FastAPI.
+# In production set ALLOWED_ORIGINS to a comma-separated list, e.g.
+#   ALLOWED_ORIGINS=https://your-app.vercel.app,https://your-domain.com
+ALLOWED_ORIGINS = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv(
+        "ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -7,7 +7,7 @@ export default function ArchGauge({ accuracy }) {
   const [drawn, setDrawn] = useState(0);
   const radius = 84;
   const circumference = Math.PI * radius; // half circle
-  const clamped = Math.max(0, Math.min(100, accuracy));
+  const clamped = Math.max(0, Math.min(100, Number(accuracy) || 0));
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setDrawn(clamped));

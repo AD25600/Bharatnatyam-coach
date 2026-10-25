@@ -1,0 +1,14 @@
+# Render Blueprint for the FastAPI backend. In Render: New → Blueprint →
+# pick this repo. Then upload the model files (see README "Deploying").
+services:
+  - type: web
+    name: natya-drishti-api
+    runtime: python
+    rootDir: bharatnatyam_backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: ALLOWED_ORIGINS
+        sync: false # set to your frontend URL, e.g. https://your-app.vercel.app

@@ -1,62 +1,24 @@
-import { useState } from "react";
-import Header from "./components/Header";
-import InputStage from "./components/InputStage";
-import ResultStage from "./components/ResultStage";
-import { analyzePose } from "./api";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import SiteLayout from "./layout/SiteLayout";
+import ErrorBoundary from "./components/ErrorBoundary";
+import LandingPage from "./pages/LandingPage";
+import DemoPage from "./pages/DemoPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import "./App.css";
 
+// Add new pages as another <Route> inside the layout.
 export default function App() {
-  const [imageBlob, setImageBlob] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-
-  function handleImageReady(blob, url) {
-    setImageBlob(blob);
-    setPreviewUrl(url);
-    setResult(null);
-    setError(null);
-  }
-
-  function handleClear() {
-    setImageBlob(null);
-    setPreviewUrl(null);
-    setResult(null);
-    setError(null);
-  }
-
-  async function handleAnalyze(blob = imageBlob) {
-    if (!blob) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await analyzePose(blob);
-      setResult(data);
-    } catch (err) {
-      setError(err.message || "Something went wrong reaching the pose server.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="app kolam-field">
-      <Header />
-      <main className="stage">
-        <InputStage
-          onImageReady={handleImageReady}
-          previewUrl={previewUrl}
-          onClear={handleClear}
-          onAnalyze={handleAnalyze}
-          loading={loading}
-          disabled={!imageBlob}
-        />
-        <ResultStage result={result} error={error} loading={loading} />
-      </main>
-      <footer className="site-footer">
-        <p>Pose classification runs on the existing Random Forest + MediaPipe pipeline — this is only the interface.</p>
-      </footer>
-    </div>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<SiteLayout />}>
+            <Route index element={<LandingPage />} />
+            <Route path="demo" element={<DemoPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }

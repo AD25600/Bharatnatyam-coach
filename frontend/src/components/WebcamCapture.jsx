@@ -14,6 +14,14 @@ export default function WebcamCapture({ onCapture }) {
     let cancelled = false;
 
     async function start() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setError(
+          window.isSecureContext === false
+            ? "The camera only works over a secure (https) connection. Please upload an image instead."
+            : "This browser doesn't support camera access. Please upload an image instead."
+        );
+        return;
+      }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { width: 640, height: 480, facingMode: "user" },
@@ -30,8 +38,13 @@ export default function WebcamCapture({ onCapture }) {
         }
         setReady(true);
       } catch (err) {
+        if (cancelled) return;
         setError(
-          "Camera access was blocked or unavailable. Allow camera permissions, or upload an image instead."
+          err?.name === "NotFoundError" || err?.name === "OverconstrainedError"
+            ? "No camera was found on this device. Please upload an image instead."
+            : err?.name === "NotReadableError"
+              ? "Your camera is in use by another app. Close it and try again, or upload an image instead."
+              : "Camera access was blocked or unavailable. Allow camera permissions, or upload an image instead."
         );
       }
     }
@@ -39,7 +52,10 @@ export default function WebcamCapture({ onCapture }) {
     start();
     return () => {
       cancelled = true;
-      if (timerRef.current) clearTimeout(timerRef.current);
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        clearInterval(timerRef.current);
+      }
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
   }, []);
@@ -102,7 +118,7 @@ export default function WebcamCapture({ onCapture }) {
   }
 
   if (error) {
-    return <p className="input-stage__error">{error}</p>;
+    return <p className="input-stage__error" role="alert">{error}</p>;
   }
 
   return (
