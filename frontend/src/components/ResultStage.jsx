@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ArchGauge from "./ArchGauge";
+import Icon from "./Icon";
 
 function toTitle(str) {
   return String(str ?? "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -27,7 +28,9 @@ function severity(degrees) {
 function EmptyState({ live, title, body, actions }) {
   return (
     <section className="panel result-panel result-panel--empty" aria-live={live}>
-      <div className="panel__arch" aria-hidden="true" />
+      <span className={`result-panel__icon ${title ? "result-panel__icon--alert" : ""}`} aria-hidden="true">
+        <Icon name={title ? "info" : "lotus"} size={28} />
+      </span>
       {title && <p className="result-panel__error-title">{title}</p>}
       <p className={title ? "result-panel__error-body" : "result-panel__waiting"}>{body}</p>
       {actions && <div className="result-panel__actions">{actions}</div>}
@@ -50,7 +53,6 @@ export default function ResultStage({ result, error, loading, onRetry, onReset }
   if (loading) {
     return (
       <section className="panel result-panel result-panel--empty" aria-live="polite" aria-busy="true">
-        <div className="panel__arch" aria-hidden="true" />
         <span className="spinner" aria-hidden="true" />
         <p className="result-panel__waiting">Reading joint angles against the reference pose…</p>
         <SlowServerHint />
@@ -59,7 +61,7 @@ export default function ResultStage({ result, error, loading, onRetry, onReset }
   }
 
   const retryButton = onRetry && (
-    <button type="button" className="btn btn--primary" onClick={onRetry}>Try again</button>
+    <button type="button" className="btn btn--primary" onClick={onRetry}><Icon name="refresh" size={16} /> Try again</button>
   );
 
   if (error) {
@@ -103,22 +105,29 @@ export default function ResultStage({ result, error, loading, onRetry, onReset }
 
   return (
     <section className="panel result-panel" aria-labelledby="result-heading" aria-live="polite">
-      <div className="panel__arch" aria-hidden="true" />
       <div className="result-panel__header">
-        <h2 id="result-heading" className="panel__title">Reading</h2>
-        <button type="button" className="btn btn--ghost btn--sm" onClick={onReset}>Try another pose</button>
+        <div className="panel__head">
+          <span className="panel__step">2</span>
+          <h2 id="result-heading" className="panel__title">Your reading</h2>
+        </div>
+        <button type="button" className="btn btn--ghost btn--sm" onClick={onReset}>
+          <Icon name="refresh" size={15} /> Try another pose
+        </button>
       </div>
 
       <div className="result-columns">
-        {result.image ? (
-          <img
-            src={`data:image/jpeg;base64,${result.image}`}
-            alt={`Highlighted pose analysis for ${toTitle(result.pose)}`}
-            className="result-columns__image"
-          />
-        ) : (
-          <div className="result-columns__image result-columns__image--missing">Annotated image unavailable</div>
-        )}
+        <figure className="mock-window result-columns__figure">
+          <div className="mock-window__bar" aria-hidden="true"><i /><i /><i /><span>Highlighted joints</span></div>
+          {result.image ? (
+            <img
+              src={`data:image/jpeg;base64,${result.image}`}
+              alt={`Highlighted pose analysis for ${toTitle(result.pose)}`}
+              className="result-columns__image"
+            />
+          ) : (
+            <div className="result-columns__image result-columns__image--missing">Annotated image unavailable</div>
+          )}
+        </figure>
 
         <div className="result-columns__info">
           <div className="result-top__summary">

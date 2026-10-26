@@ -16,7 +16,7 @@ export default class ErrorBoundary extends Component {
   render() {
     if (!this.state.hasError) return this.props.children;
     return (
-      <div className="app kolam-field fallback">
+      <div className="app fallback">
         <section className="panel fallback__panel">
           <div className="panel__arch" aria-hidden="true" />
           <h1 className="panel__title">Something went wrong</h1>

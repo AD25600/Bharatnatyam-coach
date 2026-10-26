@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import InputStage from "../components/InputStage";
 import ResultStage from "../components/ResultStage";
+import Icon from "../components/Icon";
 import { analyzePose } from "../api";
+import "./DemoPage.css";
+
+const TIPS = ["Whole body in frame, head to ankles", "Bright, even lighting", "Face the camera", "Plain background helps"];
 
 export default function DemoPage() {
   const [imageBlob, setImageBlob] = useState(null);
@@ -63,8 +67,23 @@ export default function DemoPage() {
   }
 
   return (
-    <main className="stage">
-      <h1 className="visually-hidden">Pose coach demo</h1>
+    <main className="demo">
+      <section className="demo-intro">
+        <div className="container">
+          <p className="eyebrow">Pose studio</p>
+          <h1 className="demo-intro__title">Analyse your <span>pose</span></h1>
+          <p className="demo-intro__body">
+            Upload a photo or use your webcam. You'll get the detected pose, an accuracy score, and joint-by-joint feedback.
+          </p>
+          <ul className="tips" aria-label="Tips for a good reading">
+            {TIPS.map((t) => (
+              <li key={t} className="tips__item"><Icon name="sparkle" size={14} />{t}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <div className="container stage">
       <InputStage
         onImageReady={handleImageReady}
         previewUrl={previewUrl}
@@ -80,6 +99,7 @@ export default function DemoPage() {
         onRetry={imageBlob ? () => handleAnalyze() : null}
         onReset={handleClear}
       />
+      </div>
     </main>
   );
 }

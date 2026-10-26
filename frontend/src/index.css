@@ -1,74 +1,112 @@
-@import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
+/*
+ * Design tokens. The palette blends the original maroon/gold temple
+ * scheme with the softer rose/terracotta/ivory look. Older token names
+ * (maroon-*, teal, sand…) are kept as aliases so every component keeps
+ * working; prefer the semantic names for new code.
+ */
 :root {
-  --ink: #211318;
-  --maroon: #711726;
-  --maroon-deep: #4a0e1a;
-  --maroon-bright: #8f1f31;
-  --gold: #c99a3d;
-  --gold-soft: #e0be7c;
-  --ivory: #f4ead9;
-  --sand: #e8d8bd;
-  --sand-line: #d2bd97;
-  --teal: #1f5c56;
-  --teal-soft: #2f7a72;
-  --stone: #8c7a68;
-  --stone-dark: #5c4f43;
-  --danger: #a63b2c;
+  /* Surfaces */
+  --ivory: #fbf5ee;
+  --cream: #fffaf4;
+  --blush: #f8e5dc;
+  --blush-deep: #f1d3c4;
+  --line: #ead1c2;
+  --line-strong: #d8b7a1;
 
-  --font-display: "Marcellus", "Iowan Old Style", serif;
-  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* Text */
+  --ink: #51251f;
+  --ink-strong: #3d1714;
+  --muted: #806e67;
 
-  --radius-arch: 120px 120px 8px 8px;
-  --radius-arch-sm: 64px 64px 6px 6px;
+  /* Accents */
+  --rose: #c77872;
+  --rose-dark: #a95e58;
+  --terracotta: #a95f4d;
+  --maroon: #6e2430;
+  --gold: #c9a276;
+  --gold-deep: #a9793f;
+  --gold-soft: #f0d9b5;
+  --green: #4c9870;
+  --amber: #c98a3d;
+  --danger: #b4483a;
+
+  /* Legacy aliases used by existing components */
+  --maroon-deep: var(--ink);
+  --maroon-bright: var(--rose-dark);
+  --teal: var(--green);
+  --teal-soft: var(--green);
+  --sand: var(--blush);
+  --sand-line: var(--line);
+  --stone: var(--muted);
+  --stone-dark: #6a4d45;
+
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --radius-sm: 12px;
+  --radius: 20px;
+  --radius-lg: 28px;
+  --radius-arch: 220px 220px 28px 28px;
+  --shadow: 0 18px 45px rgba(101, 48, 36, 0.08);
+  --shadow-lift: 0 24px 50px -18px rgba(101, 48, 36, 0.22);
+
+  --container: 1160px;
+  --gutter: clamp(16px, 4vw, 24px);
+  --header-h: 76px;
 
   color-scheme: light;
 }
 
 * { box-sizing: border-box; }
 
-html, body, #root {
-  height: 100%;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 12px);
 }
+
+html, body, #root { min-height: 100%; }
 
 body {
   margin: 0;
   font-family: var(--font-body);
   color: var(--ink);
   background: var(--ivory);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 600;
   margin: 0;
-  color: var(--maroon-deep);
+  color: var(--ink-strong);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
 p { margin: 0; }
 
+img, svg { max-width: 100%; }
+
 button {
-  font-family: var(--font-body);
+  font: inherit;
   cursor: pointer;
 }
 
-a { color: inherit; }
+a { color: inherit; text-decoration: none; }
 
 ::selection {
-  background: var(--gold-soft);
-  color: var(--maroon-deep);
+  background: var(--blush-deep);
+  color: var(--ink-strong);
 }
 
 :focus-visible {
-  outline: 2px solid var(--teal);
+  outline: 2px solid var(--rose-dark);
   outline-offset: 3px;
-}
-
-/* Kolam dot-grid texture, used sparingly as a background wash */
-.kolam-field {
-  background-image: radial-gradient(var(--sand-line) 1px, transparent 1.4px);
-  background-size: 28px 28px;
+  border-radius: 6px;
 }
 
 .visually-hidden {
@@ -80,10 +118,10 @@ a { color: inherit; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
   }
 }

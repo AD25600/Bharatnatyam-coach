@@ -132,7 +132,7 @@ export default function WebcamCapture({ onCapture }) {
         )}
       </div>
       <button type="button" className="btn btn--primary webcam__shutter" onClick={startCapture} disabled={!ready || countdown !== null}>
-        Start Capture
+        {countdown !== null ? "Hold the pose\u2026" : "Start 3-second capture"}
       </button>
     </div>
   );

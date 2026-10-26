@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import WebcamCapture from "./WebcamCapture";
+import Icon from "./Icon";
 import { config } from "../config";
 
 const MAX_BYTES = config.maxUploadMb * 1024 * 1024;
@@ -31,8 +32,10 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
 
   return (
     <section className="panel input-panel" aria-labelledby="input-heading">
-      <div className="panel__arch" aria-hidden="true" />
-      <h2 id="input-heading" className="panel__title">Give it a pose</h2>
+      <div className="panel__head">
+        <span className="panel__step">1</span>
+        <h2 id="input-heading" className="panel__title">Give it a pose</h2>
+      </div>
 
       <div className="tabbar" role="tablist" aria-label="Image source">
         <button
@@ -42,7 +45,7 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
           onClick={() => { setMode("upload"); setFileError(null); }}
           disabled={loading}
         >
-          Upload image
+          <Icon name="upload" size={16} /> Upload image
         </button>
         <button
           role="tab"
@@ -51,7 +54,7 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
           onClick={() => { setMode("webcam"); setFileError(null); }}
           disabled={loading}
         >
-          Use webcam
+          <Icon name="camera" size={16} /> Use webcam
         </button>
       </div>
 
@@ -75,8 +78,9 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
             }
           }}
         >
-          <p className="dropzone__title">Drop a photo of the pose here</p>
-          <p className="dropzone__hint">or click to browse — full body, clearly lit, facing camera</p>
+          <span className="dropzone__icon" aria-hidden="true"><Icon name="upload" size={28} /></span>
+          <p className="dropzone__title">Drop a photo of your pose here</p>
+          <p className="dropzone__hint">or <span className="dropzone__link">browse your files</span> · JPG, PNG or WebP · up to {config.maxUploadMb} MB</p>
           <input
             ref={fileInputRef}
             type="file"
@@ -125,7 +129,7 @@ export default function InputStage({ onImageReady, previewUrl, onClear, onAnalyz
               onClick={() => onAnalyze()}
               disabled={disabled || loading}
             >
-              {loading ? "Reading the pose\u2026" : "Analyze pose"}
+              {loading ? "Reading the pose\u2026" : <>Analyse pose <Icon name="arrow" size={18} /></>}
             </button>
           </div>
         </div>

@@ -15,7 +15,7 @@ export default function ArchGauge({ accuracy }) {
   }, [clamped]);
 
   const tone =
-    clamped >= 90 ? "var(--teal)" : clamped >= 75 ? "var(--gold)" : "var(--maroon-bright)";
+    clamped >= 90 ? "var(--teal)" : clamped >= 75 ? "var(--amber)" : "var(--maroon-bright)";
 
   const offset = circumference - (drawn / 100) * circumference;
 
@@ -25,7 +25,7 @@ export default function ArchGauge({ accuracy }) {
         <path
           d="M 16 108 A 84 84 0 0 1 184 108"
           fill="none"
-          stroke="var(--sand-line)"
+          stroke="var(--blush-deep)"
           strokeWidth="12"
           strokeLinecap="round"
         />
